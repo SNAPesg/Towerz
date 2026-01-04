@@ -1,7 +1,7 @@
 SimTower Clone (JavaScript/HTML5)
 A modern, open-source recreation of the classic 1994 Maxis game SimTower (aka The Tower in Japan), built with vanilla JavaScript, HTML5 Canvas, and pure CSS — no frameworks, no engines.
 Play it in any modern browser, build massive skyscrapers, manage residents, offices, hotels, elevators, and watch your tower come to life with simulated people, day/night cycles, and economic systems.
-Live Demo (when deployed): (coming soon once repo is public)
+
 Current Status: Early playable prototype
 Goal: Full faithful recreation of SimTower gameplay + modern improvements
 Playable Features (as of January 2026)
