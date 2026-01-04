@@ -61,15 +61,6 @@ HTML5 Canvas (2D context)
 CSS (Windows 95-inspired retro UI)
 No external dependencies
 
-Fully self-contained — just open index.html in a browser.
-How to Run Locally
-git clone https://github.com/yourusername/simtower-js.git
-cd simtower-js
-Then simply open index.html in your browser (no server needed).
-Or use a local server for cleaner experience:
-npx serve
-or
-python -m http.server 8000
 Contributing
 This project is meant to be a community-driven love letter to SimTower. Contributions of all kinds are very welcome!
 Areas where help is especially needed:
