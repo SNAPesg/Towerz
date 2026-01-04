@@ -1,0 +1,129 @@
+# SimTower Clone (JavaScript/HTML5)
+
+A modern, open-source recreation of the classic 1994 Maxis game **SimTower** (aka *The Tower* in Japan), built with vanilla JavaScript, HTML5 Canvas, and pure CSS — no frameworks, no engines.
+
+Play it in any modern browser, build massive skyscrapers, manage residents, offices, hotels, elevators, and watch your tower come to life with simulated people, day/night cycles, and economic systems.
+
+**Live Demo (when deployed):** *(coming soon once repo is public)*
+
+**Current Status:** Early playable prototype  
+**Goal:** Full faithful recreation of SimTower gameplay + modern improvements
+
+## Playable Features (as of January 2026)
+
+- Grid-based tower construction (40×50 floors)
+- Place: Offices, Condos, Hotels, Food Courts, Retail Shops, Cinemas, Parking, Stairs, Elevators, Lobbies, Sky Lobbies
+- Starting $2,000,000 budget with realistic build costs
+- Day/night cycle with time acceleration (Pause / Play / Fast)
+- Basic population simulation:
+  - Office workers arrive in morning rush, go to work, leave in evening
+  - People walk, wait for and ride elevators
+  - Stress system (red dot when waiting too long)
+- Elevator system with:
+  - Realistic door opening/closing
+  - Multi-car shafts
+  - Floor request queue with directional logic
+  - Visual car movement and interior lighting
+- Income from offices, hotels, retail, food, cinema, parking
+- Classic Windows 95-style UI with beveled buttons, status bar, and toolbar
+- Pixel-perfect crisp rendering (image smoothing disabled)
+- Retro beep sounds on placement
+
+## Missing / Planned Features (Road to Full SimTower)
+
+We have a solid foundation — now it's about adding depth and polish to reach the full SimTower experience.
+
+### High Priority (Core Gameplay)
+- [ ] **Full resident simulation** (condo/hotel guests with daily routines, happiness, moving in/out)
+- [ ] **Proper population cap & tower rating system** (1–5 stars → Tower status → final goal: 100 floors + Cathedral)
+- [ ] **Stress & complaints system** (overcrowding, noise, security, cleanliness affecting rent/income)
+- [ ] **Security offices** (reduce crime/terrorism events)
+- [ ] **Housekeeping / Cleaning system** (dirt accumulation, janitors)
+- [ ] **Express elevators & Sky Lobbies** fully functional (transfer floors)
+- [ ] **Service elevators** (separate from passenger)
+- [ ] **Metro station & underground integration**
+- [ ] **Fire, terrorism, and disaster events**
+- [ ] **Recycling center & medical clinic effects**
+
+### Medium Priority (Polish & Depth)
+- [ ] More room types: Fast Food, Deluxe Hotel Suites, Recycling, Medical, Cathedral
+- [ ] Better AI pathfinding (stairs as fallback, multiple elevator banks)
+- [ ] Elevator scheduling improvements (predictive stopping, rush hour logic)
+- [ ] Day/night lighting effects on windows
+- [ ] Animated people sprites (walking, different clothes)
+- [ ] Sound effects (elevator ding, crowd noise, construction)
+- [ ] Save/Load game state
+- [ ] Multiple tower scenarios / challenges
+
+### Low Priority (Nice to Have)
+- [ ] Zoom / pan controls
+- [ ] Modern UI toggle option
+- [ ] Mobile/touch support
+- [ ] Achievements / leaderboards
+- [ ] Mod support (custom sprites, rules)
+
+## Tech Stack
+
+- Vanilla JavaScript (ES6 modules)
+- HTML5 Canvas (2D context)
+- CSS (Windows 95-inspired retro UI)
+- No external dependencies
+
+Fully self-contained — just open `index.html` in a browser.
+
+## How to Run Locally
+
+```bash
+git clone https://github.com/yourusername/simtower-js.git
+cd simtower-js
+```
+
+Then simply open `index.html` in your browser (no server needed).
+
+Or use a local server for cleaner experience:
+
+```bash
+npx serve
+# or
+python -m http.server 8000
+```
+
+## Contributing
+
+This project is meant to be a community-driven love letter to SimTower. Contributions of all kinds are very welcome!
+
+Areas where help is especially needed:
+- Game logic (population, economy, events)
+- AI/pathfinding improvements
+- Sprite art (pixel art rooms, people, animations)
+- Sound design
+- UI/UX polish
+- Bug fixes and performance
+
+Please:
+- Use consistent code style (see existing files)
+- Keep it vanilla JS — no frameworks
+- Target modern browsers (Chrome, Firefox, Safari)
+
+Open issues, submit pull requests, or just share ideas!
+
+## License
+
+MIT License — feel free to use, modify, and distribute.
+
+(Commercial use allowed, but please credit the project if you build something cool with it!)
+
+## Credits
+
+- Original game: **SimTower** by Maxis / Yoot Saito (1994)
+- This clone: Started in 2025–2026 as a passion project
+- Inspired by the timeless joy of watching little people live in your virtual tower
+
+---
+
+**Let's build the ultimate tower together.**
+
+★☆☆☆☆ → ★★★★★
+
+*Tower status: 1 Star*  
+*Goal: 100 floors + Cathedral*
