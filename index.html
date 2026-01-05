@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SimTower Clone</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Courier New', Courier, monospace;
+            background: #000;
+            overflow: hidden;
+            height: 100vh;
+            color: #000;
+        }
+        
+        /* Main Layout Grid */
+        #game-container {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            grid-template-rows: 40px 1fr 30px;
+            grid-template-areas:
+                "toolbar statusbar"
+                "toolbar viewport"
+                "toolbar bottombar";
+            height: 100vh;
+            width: 100vw;
+        }
+        
+        /* Top Status Bar - Classic Inset Panel */
+        #status-bar {
+            grid-area: statusbar;
+            background: #c0c0c0;
+            border-bottom: 2px solid #808080;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            gap: 20px;
+            font-size: 13px;
+            box-shadow: inset 0 -2px 4px rgba(0,0,0,0.2);
+        }
+        
+        #status-bar .section {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        #status-bar .label {
+            font-weight: bold;
+        }
+        
+        #status-bar .value {
+            background: #ffffff;
+            padding: 2px 8px;
+            border-top: 2px solid #404040;
+            border-left: 2px solid #404040;
+            border-right: 2px solid #e0e0e0;
+            border-bottom: 2px solid #e0e0e0;
+            font-weight: bold;
+        }
+        
+        #rating-display {
+            color: #000;
+            font-size: 18px;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+        
+        /* Left Toolbar */
+        #toolbar {
+            grid-area: toolbar;
+            background: #c0c0c0;
+            border-right: 2px solid #808080;
+            display: flex;
+            flex-direction: column;
+            padding: 8px 4px;
+            gap: 4px;
+            overflow-y: auto;
+        }
+        
+        /* Classic Windows 95 Beveled Buttons */
+        .tool-button, .time-control {
+            background: #c0c0c0;
+            border-top: 2px solid #ffffff;
+            border-left: 2px solid #ffffff;
+            border-right: 2px solid #404040;
+            border-bottom: 2px solid #404040;
+            border-radius: 0;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: #000;
+            box-shadow: none;
+            transition: none;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0; /* Prevent buttons from squishing */
+        }
+        
+        .tool-button {
+            width: 72px;
+            height: 72px;
+        }
+        
+        .tool-button:hover {
+            background: #d0d0d0;
+        }
+        
+        .tool-button:active,
+        .time-control:active {
+            border-top: 2px solid #404040;
+            border-left: 2px solid #404040;
+            border-right: 2px solid #ffffff;
+            border-bottom: 2px solid #ffffff;
+            transform: translate(1px, 1px);
+        }
+        
+        .tool-button.selected {
+            background: #ffff00; /* SimTower yellow selection */
+            border-top: 2px solid #404040;
+            border-left: 2px solid #404040;
+            border-right: 2px solid #ffffff;
+            border-bottom: 2px solid #ffffff;
+            color: #000;
+            font-weight: bold;
+        }
+        
+        .tool-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+        
+        .tool-cost {
+            font-size: 9px;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+        
+        /* Main Viewport */
+        #game-viewport {
+            grid-area: viewport;
+            background: #000;
+            overflow: auto;
+            position: relative;
+            border-top: 4px solid #808080;
+            border-left: 4px solid #808080;
+            border-right: 4px solid #404040;
+            border-bottom: 4px solid #404040;
+        }
+        
+        #simCanvas {
+            display: block;
+            cursor: crosshair;
+        }
+        
+        /* Bottom Bar */
+        #bottom-bar {
+            grid-area: bottombar;
+            background: #c0c0c0;
+            border-top: 2px solid #ffffff;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            gap: 12px;
+            font-size: 11px;
+        }
+        
+        .time-control {
+            padding: 4px 12px;
+            font-weight: bold;
+        }
+        
+        .time-control:hover {
+            background: #d0d0d0;
+        }
+        
+        .time-control.active {
+            background: #c0c0c0;
+            border-top: 2px solid #404040;
+            border-left: 2px solid #404040;
+            border-right: 2px solid #ffffff;
+            border-bottom: 2px solid #ffffff;
+        }
+        
+        #time-display {
+            margin-left: auto;
+            font-weight: bold;
+        }
+        
+        /* Scrollbar - Classic Grey */
+        #game-viewport::-webkit-scrollbar {
+            width: 16px;
+            height: 16px;
+        }
+        
+        #game-viewport::-webkit-scrollbar-track {
+            background: #c0c0c0;
+            border-left: 2px solid #808080;
+        }
+        
+        #game-viewport::-webkit-scrollbar-thumb {
+            background: #c0c0c0;
+            border-top: 2px solid #ffffff;
+            border-left: 2px solid #ffffff;
+            border-right: 2px solid #404040;
+            border-bottom: 2px solid #404040;
+        }
+        
+        #game-viewport::-webkit-scrollbar-thumb:hover {
+            background: #d0d0d0;
+        }
+        
+        #game-viewport::-webkit-scrollbar-corner {
+            background: #c0c0c0;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="status-bar">
+            <div class="section">
+                <span class="label">Money:</span>
+                <span class="value" id="money-display">$0</span>
+            </div>
+            <div class="section">
+                <span class="label">Income:</span>
+                <span class="value" id="income-display">$0</span>
+            </div>
+            <div class="section">
+                <span class="label">Pop:</span>
+                <span class="value" id="pop-display">0</span>
+            </div>
+            <div class="section">
+                <span class="label">Rating:</span>
+                <span id="rating-display">★</span>
+            </div>
+            <div class="section">
+                <span class="label">Day:</span>
+                <span class="value" id="day-display">1</span>
+            </div>
+        </div>
+        
+        <div id="toolbar">
+            <button class="tool-button selected" data-tool="OFFICE" title="Office">
+                <div class="tool-icon">🏢</div>
+                <div>Office</div>
+                <div class="tool-cost">$500</div>
+            </button>
+            <button class="tool-button" data-tool="CONDO" title="Condo">
+                <div class="tool-icon">🏠</div>
+                <div>Condo</div>
+                <div class="tool-cost">$1000</div>
+            </button>
+            <button class="tool-button" data-tool="HOTEL" title="Hotel">
+                <div class="tool-icon">🏨</div>
+                <div>Hotel</div>
+                <div class="tool-cost">$800</div>
+            </button>
+            <button class="tool-button" data-tool="STAIRS" title="Stairs">
+                <div class="tool-icon">🪜</div>
+                <div>Stairs</div>
+                <div class="tool-cost">$200</div>
+            </button>
+            <button class="tool-button" data-tool="ELEVATOR" title="Elevator">
+                <div class="tool-icon">🛗</div>
+                <div>Elevator</div>
+                <div class="tool-cost">$1500</div>
+            </button>
+            <button class="tool-button" data-tool="ELEVATOR_SERVICE" title="Service Lift">
+                <div class="tool-icon">🔧</div>
+                <div>Service</div>
+                <div class="tool-cost">$2k</div>
+            </button>
+            <button class="tool-button" data-tool="FOOD" title="Restaurant">
+                <div class="tool-icon">🍽️</div>
+                <div>Food</div>
+                <div class="tool-cost">$600</div>
+            </button>
+            <button class="tool-button" data-tool="RETAIL" title="Retail">
+                <div class="tool-icon">🛍️</div>
+                <div>Shop</div>
+                <div class="tool-cost">$400</div>
+            </button>
+            <button class="tool-button" data-tool="CINEMA" title="Cinema">
+                <div class="tool-icon">🎬</div>
+                <div>Cinema</div>
+                <div class="tool-cost">$2k</div>
+            </button>
+            <button class="tool-button" data-tool="PARKING" title="Parking">
+                <div class="tool-icon">🅿️</div>
+                <div>Parking</div>
+                <div class="tool-cost">$300</div>
+            </button>
+            <button class="tool-button" data-tool="SKY_LOBBY" title="Sky Lobby">
+                <div class="tool-icon">🌆</div>
+                <div>Sky Lobby</div>
+                <div class="tool-cost">$5k</div>
+            </button>
+            <button class="tool-button" data-tool="CLEANING_SERVICE" title="Housekeeping">
+                <div class="tool-icon">🧹</div>
+                <div>Cleaning</div>
+                <div class="tool-cost">$50k</div>
+            </button>
+            <button class="tool-button" data-tool="CATHEDRAL" title="Cathedral">
+                <div class="tool-icon">⛪</div>
+                <div>Cathedral</div>
+                <div class="tool-cost">$100k</div>
+            </button>
+            <button class="tool-button" data-tool="SECURITY" title="Security">
+                <div class="tool-icon">👮</div>
+                <div>Security</div>
+                <div class="tool-cost">$30k</div>
+            </button>
+            <button class="tool-button" data-tool="METRO" title="Metro">
+                <div class="tool-icon">🚇</div>
+                <div>Metro</div>
+                <div class="tool-cost">$50k</div>
+            </button>
+            <button class="tool-button" data-tool="MEDICAL" title="Medical">
+                <div class="tool-icon">🏥</div>
+                <div>Medical</div>
+                <div class="tool-cost">$40k</div>
+            </button>
+            <button class="tool-button" data-tool="RECYCLING" title="Recycling">
+                <div class="tool-icon">♻️</div>
+                <div>Recycle</div>
+                <div class="tool-cost">$20k</div>
+            </button>
+        </div>
+        
+        <div id="game-viewport">
+            <canvas id="simCanvas"></canvas>
+        </div>
+        
+        <div id="bottom-bar">
+            <button class="time-control" id="pause-btn" title="Pause (Space)">⏸️ Pause</button>
+            <button class="time-control active" id="play-btn" title="Play (Space)">▶️ Play</button>
+            <button class="time-control" id="fast-btn" title="Fast Forward">⏩ Fast</button>
+            <span id="time-display">12:00 AM</span>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { Engine } from './Engine.js';
+        
+        window.onload = () => {
+            console.log("Starting Engine...");
+            const game = new Engine();
+        };
+    </script>
+</body>
+</html>
